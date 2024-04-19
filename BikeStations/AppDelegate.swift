@@ -9,11 +9,21 @@ import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let appearance = UINavigationBarAppearance()
+        let barButtonItemAppearance = UIBarButtonItemAppearance(style: .plain)
+        barButtonItemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.clear]
+
+        appearance.backgroundColor = UIColor(named: "NavigationBarColor")
+        appearance.setBackIndicatorImage(UIImage(named: "Arrow"), transitionMaskImage: UIImage(named: "Arrow"))
+        appearance.backButtonAppearance = barButtonItemAppearance
+
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+
+        register()
         return true
     }
 
@@ -25,12 +35,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
 
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    private func register() {
+        DependencyContainer.shared.register(APIClient.self, APIClient.init)
+        DependencyContainer.shared.register(BikeStationMapper.self, BikeStationMapperImpl.init)
+        DependencyContainer.shared.register(BikeStationStatusMapper.self, BikeStationStatusMapperImpl.init)
+        DependencyContainer.shared.register(BikeStationInfoRepository.self, BikeStationInfoRepositoryImpl.init)
+        DependencyContainer.shared.register(BikeStationStatusRepository.self, BikeStationStatusRepositoryImpl.init)
+        DependencyContainer.shared.register(BikeStationListViewModel.self, BikeStationListViewModel.init)
+        DependencyContainer.shared.register(GetUserLocationUseCase.self, GetUserLocationUseCaseImpl.init)
+        DependencyContainer.shared.register(GetBikeStationsUseCase.self, GetBikeStationsUseCaseImpl.init)
     }
-
-
 }
 
